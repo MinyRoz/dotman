@@ -45,7 +45,7 @@ jobs:
       - name: Lint
         shell: pwsh
         run: |
-          $issues = Invoke-ScriptAnalyzer -Path bin/dotman.ps1, install.ps1 -Severity Error
+          $issues = Invoke-ScriptAnalyzer -Path . -Recurse -Severity Error
           $issues | Format-Table -AutoSize
           if ($issues) { throw "PSScriptAnalyzer found $($issues.Count) error(s)" }
       - name: dotman doctor
