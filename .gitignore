@@ -1,0 +1,18 @@
+# dotman runtime artifacts
+.dotman-backups/
+
+# Machine-local overrides (never commit secrets)
+*.local
+.bashrc.local
+profile.local.ps1
+
+# OS cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor cruft
+*.swp
+*~
+.idea/
+.vscode/

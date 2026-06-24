@@ -1,0 +1,18 @@
+# Sample gitconfig managed by dotman. Edit to taste.
+[user]
+	# name = Your Name
+	# email = you@example.com
+[init]
+	defaultBranch = main
+[core]
+	autocrlf = input
+	editor = vim
+[color]
+	ui = auto
+[pull]
+	ff = only
+[alias]
+	st = status -sb
+	co = checkout
+	br = branch
+	lg = log --oneline --graph --decorate --all

@@ -1,0 +1,17 @@
+# Sample .bashrc managed by dotman.
+# Keep machine-specific secrets in ~/.bashrc.local (not tracked).
+
+# Source shared aliases if present.
+[ -f "$HOME/.config/shell/aliases.sh" ] && . "$HOME/.config/shell/aliases.sh"
+
+# Sensible defaults.
+export EDITOR="${EDITOR:-vim}"
+export HISTSIZE=10000
+export HISTCONTROL=ignoreboth
+shopt -s histappend 2>/dev/null || true
+
+# A minimal, informative prompt.
+PS1='\[\033[1;32m\]\u@\h\[\033[0m\]:\[\033[1;34m\]\w\[\033[0m\]\$ '
+
+# Per-machine overrides.
+[ -f "$HOME/.bashrc.local" ] && . "$HOME/.bashrc.local"

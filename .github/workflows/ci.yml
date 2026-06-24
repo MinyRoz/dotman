@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  shellcheck:
+    name: ShellCheck (bash)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run shellcheck
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y shellcheck
+          shellcheck bin/dotman install.sh scripts/*.sh
+
+  smoke-unix:
+    name: Smoke test (${{ matrix.os }})
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: dotman doctor
+        run: ./bin/dotman doctor
+      - name: dotman install --dry-run
+        run: ./bin/dotman install --dry-run
+      - name: dotman install
+        run: ./bin/dotman install
+      - name: dotman status
+        run: ./bin/dotman status
+
+  pwsh:
+    name: PSScriptAnalyzer + smoke (windows)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PSScriptAnalyzer
+        shell: pwsh
+        run: Install-Module PSScriptAnalyzer -Force -Scope CurrentUser
+      - name: Lint
+        shell: pwsh
+        run: |
+          $issues = Invoke-ScriptAnalyzer -Path bin/dotman.ps1, install.ps1 -Severity Error
+          $issues | Format-Table -AutoSize
+          if ($issues) { throw "PSScriptAnalyzer found $($issues.Count) error(s)" }
+      - name: dotman doctor
+        shell: pwsh
+        run: ./bin/dotman.ps1 doctor
+      - name: dotman install -DryRun
+        shell: pwsh
+        run: ./bin/dotman.ps1 install -DryRun
